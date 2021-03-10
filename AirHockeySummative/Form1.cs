@@ -26,13 +26,13 @@ namespace AirHockeySummative
         int paddleHeight = 50;
         int paddleSpeed = 4;
 
-        //puck
+        //black puck
         int puckX = 295;
         int puckY = 195;
-        int puckXSpeed = 6;
-        int puckYSpeed = 6;
-        int puckWidth = 10;
-        int puckHeight = 10;
+        int puckXSpeed = 0;
+        int puckYSpeed = 0;
+        int puckWidth = 50;
+        int puckHeight = 50; 
 
         //keys
         bool wDown = false;
@@ -47,6 +47,8 @@ namespace AirHockeySummative
 
         SolidBrush purpleBrush = new SolidBrush(Color.MediumPurple);
         SolidBrush pinkBrush = new SolidBrush(Color.LightPink);
+        SolidBrush blackBrush = new SolidBrush(Color.Black);
+
         Font screenFont = new Font("Consolas", 12);
 
         public Form1()
@@ -123,13 +125,15 @@ namespace AirHockeySummative
             //two player icons
             e.Graphics.FillEllipse(purpleBrush, player1X, player1Y, paddleWidth, paddleHeight);
             e.Graphics.FillEllipse(pinkBrush, player2X, player2Y, paddleWidth, paddleHeight);
+            //puck
+            e.Graphics.FillEllipse(blackBrush, puckX, puckY, puckWidth, puckHeight);
         }
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
-            //move ball
-            puckX +=puckXSpeed;
-            puckY += puckYSpeed; 
+            //move ball 
+            puckX += puckXSpeed;
+            puckY += puckYSpeed;
 
             //move player 1
             if (wDown == true && player1Y > 0)
@@ -168,11 +172,35 @@ namespace AirHockeySummative
                 player2X += paddleSpeed;
             }
 
-            //ball hits wall
-
-            //nets
+            //create Rectangles of objects on screen to be used for collision detection 
+            Rectangle player1Rec = new Rectangle(player1X, player1Y, paddleWidth, paddleHeight);
+            Rectangle player2Rec = new Rectangle(player2X, player2Y, paddleWidth, paddleHeight);
+            Rectangle puckRec = new Rectangle(puckX, puckY, puckWidth, puckHeight);
 
             //check if ball hits either paddle. If it does change the direction 
+            if (player1Rec.IntersectsWith(puckRec))
+            {
+                puckXSpeed *= -1;
+                puckX = player1X + paddleWidth + 1;
+             
+            }
+            else if (player2Rec.IntersectsWith(puckRec))
+            {
+                puckXSpeed *= -1;
+                puckX = player2X - puckWidth - 1;
+                
+            }
+
+            //ball hits wall
+            if (puckY < 0 || puckY > this.Height - puckHeight)
+            {
+                puckYSpeed *= -1;  // or: ballYSpeed = -ballYSpeed;
+                puckY = player2Y - puckHeight - 1;
+                puckX += puckXSpeed;
+                puckY += puckYSpeed;
+            }
+
+            //nets
 
             //score tracker
 
