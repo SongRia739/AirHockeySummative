@@ -27,12 +27,12 @@ namespace AirHockeySummative
         int paddleSpeed = 4;
 
         //black puck
-        int puckX = 295;
-        int puckY = 195;
-        int puckXSpeed = 0;
-        int puckYSpeed = 0;
-        int puckWidth = 50;
-        int puckHeight = 50; 
+        int puckX = 190;
+        int puckY = 285;
+        int puckXSpeed = 5;
+        int puckYSpeed = 5;
+        int puckWidth = 40;
+        int puckHeight = 40; 
 
         //keys
         bool wDown = false;
@@ -48,6 +48,10 @@ namespace AirHockeySummative
         SolidBrush purpleBrush = new SolidBrush(Color.MediumPurple);
         SolidBrush pinkBrush = new SolidBrush(Color.LightPink);
         SolidBrush blackBrush = new SolidBrush(Color.Black);
+        SolidBrush blueBrush = new SolidBrush(Color.LightSkyBlue);
+        SolidBrush greyBrush = new SolidBrush(Color.Gray);
+        SolidBrush lightgreyBrush = new SolidBrush(Color.LightGray);
+        Pen purplePen = new Pen(Color.MediumPurple);
 
         Font screenFont = new Font("Consolas", 12);
 
@@ -122,6 +126,17 @@ namespace AirHockeySummative
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            //arena
+            e.Graphics.FillRectangle(pinkBrush, 0, 300, 1000, 10);
+       //     e.Graphics.DrawEllipse(purplePen, 160, 250, 70, 70);
+            //border
+            e.Graphics.FillRectangle(greyBrush, 0, 1, 1000, 20);
+            e.Graphics.FillRectangle(greyBrush, 0, 580, 1000, 20);
+            e.Graphics.FillRectangle(lightgreyBrush, 0, 0, 30, 600);
+            e.Graphics.FillRectangle(lightgreyBrush, 350, 0, 30, 600);
+            //net
+            e.Graphics.FillRectangle(blueBrush, 150, 1, 100, 20);
+            e.Graphics.FillRectangle(blueBrush, 150, 580, 100, 20);
             //two player icons
             e.Graphics.FillEllipse(purpleBrush, player1X, player1Y, paddleWidth, paddleHeight);
             e.Graphics.FillEllipse(pinkBrush, player2X, player2Y, paddleWidth, paddleHeight);
@@ -136,7 +151,7 @@ namespace AirHockeySummative
             puckY += puckYSpeed;
 
             //move player 1
-            if (wDown == true && player1Y > 0)
+            if (wDown == true && player1Y > 300) 
             {
                 player1Y -= paddleSpeed;
             }
@@ -159,7 +174,7 @@ namespace AirHockeySummative
             {
                 player2Y -= paddleSpeed;
             }
-            if (downArrowDown == true && player2Y < this.Height - paddleHeight)
+            if (downArrowDown == true && player2Y < 260) 
             {
                 player2Y += paddleSpeed;
             }
@@ -192,17 +207,37 @@ namespace AirHockeySummative
             }
 
             //ball hits wall
-            if (puckY < 0 || puckY > this.Height - puckHeight)
+            puckX += puckXSpeed;
+            puckY += puckYSpeed;
+
+            if (puckY < 20 || puckY > this.Height - 20 - puckHeight)
             {
-                puckYSpeed *= -1;  // or: ballYSpeed = -ballYSpeed;
-                puckY = player2Y - puckHeight - 1;
-                puckX += puckXSpeed;
-                puckY += puckYSpeed;
+                puckYSpeed *= -1;  
+            }
+            if (puckX < 30 || puckX > this.Width - 30 - puckWidth)
+            {
+                puckXSpeed *= -1;
             }
 
             //nets
 
             //score tracker
+            if (puckX < 0 && playerTurn == 1)
+            {
+                player2Score++;
+
+                p2ScoreLabel.Text = $"{player2Score}";
+                puckX = 295;
+                puckY = 195;
+            }
+            if (puckX < 0 && playerTurn == 2)
+            {
+                player1Score++;
+
+                p1ScoreLabel.Text = $"{player1Score}";
+                puckX = 295;
+                puckY = 195;
+            }
 
             //3 point tracker
             if (player1Score == 3 || player2Score == 3)
