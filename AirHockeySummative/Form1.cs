@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*Ria Das
+ * Air Hockey
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,11 +19,11 @@ namespace AirHockeySummative
         int playerTurn = 1;
 
         int player1X = 175;
-        int player1Y = 550;
+        int player1Y = 500;
         int player1Score = 0;
 
         int player2X = 175;
-        int player2Y = 1;
+        int player2Y = 50;
         int player2Score = 0;
 
         int paddleWidth = 50;
@@ -29,8 +33,8 @@ namespace AirHockeySummative
         //black puck
         int puckX = 190;
         int puckY = 285;
-        int puckXSpeed = 5;
-        int puckYSpeed = 5;
+        int puckXSpeed = 3;
+        int puckYSpeed = 3;
         int puckWidth = 40;
         int puckHeight = 40; 
 
@@ -191,6 +195,8 @@ namespace AirHockeySummative
             Rectangle player1Rec = new Rectangle(player1X, player1Y, paddleWidth, paddleHeight);
             Rectangle player2Rec = new Rectangle(player2X, player2Y, paddleWidth, paddleHeight);
             Rectangle puckRec = new Rectangle(puckX, puckY, puckWidth, puckHeight);
+            Rectangle p1goal = new Rectangle(150, 1, 100, 20);
+            Rectangle p2goal = new Rectangle(150, 580, 100, 20);
 
             //check if ball hits either paddle. If it does change the direction 
             if (player1Rec.IntersectsWith(puckRec))
@@ -202,7 +208,7 @@ namespace AirHockeySummative
             else if (player2Rec.IntersectsWith(puckRec))
             {
                 puckXSpeed *= -1;
-                puckX = player2X - puckWidth - 1;
+                puckX = player2X - puckWidth + 1;
                 
             }
 
@@ -220,23 +226,21 @@ namespace AirHockeySummative
             }
 
             //nets
-
-            //score tracker
-            if (puckX < 0 && playerTurn == 1)
+            if (puckRec.IntersectsWith(p1goal))
             {
                 player2Score++;
 
                 p2ScoreLabel.Text = $"{player2Score}";
-                puckX = 295;
-                puckY = 195;
+                int puckX = 190;
+                int puckY = 285;
             }
-            if (puckX < 0 && playerTurn == 2)
+           if (puckRec.IntersectsWith(p2goal))
             {
                 player1Score++;
 
                 p1ScoreLabel.Text = $"{player1Score}";
-                puckX = 295;
-                puckY = 195;
+                int puckX = 190;
+                int puckY = 285;
             }
 
             //3 point tracker
