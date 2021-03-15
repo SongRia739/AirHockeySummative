@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace AirHockeySummative
 {
@@ -199,14 +200,17 @@ namespace AirHockeySummative
             Rectangle p2goal = new Rectangle(150, 580, 100, 20);
 
             //check if ball hits either paddle. If it does change the direction 
+            SoundPlayer hitSound = new SoundPlayer(Properties.Resources.HitSound);
             if (player1Rec.IntersectsWith(puckRec))
             {
+                hitSound.Play();
                 puckXSpeed *= -1;
                 puckX = player1X + paddleWidth + 1;
              
             }
             else if (player2Rec.IntersectsWith(puckRec))
             {
+                hitSound.Play();
                 puckXSpeed *= -1;
                 puckX = player2X - puckWidth + 1;
                 
